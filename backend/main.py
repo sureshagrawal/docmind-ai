@@ -1,8 +1,11 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
+from slowapi import _rate_limit_exceeded_handler
+from slowapi.errors import RateLimitExceeded
 
 from config import get_settings
 from database.db_client import init_db
+from middleware.rate_limiter import limiter
 from utils.logger import logger
 
 from api.v1.routers.health import router as health_router
@@ -20,6 +23,10 @@ app = FastAPI(
     version=settings.APP_VERSION,
 )
 
+# ─── Rate Limiter ────────────────────────────────────────────
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+
 # ─── CORS ────────────────────────────────────────────────────
 app.add_middleware(
     CORSMiddleware,
@@ -28,6 +35,14 @@ app.add_middleware(
     allow_methods=["GET", "POST", "PATCH", "DELETE"],
     allow_headers=["*"],
 )
+
+
+# ─── Security Headers ───────────────────────────────────────
+@app.middleware("http")
+async def add_security_headers(request: Request, call_next):
+    response: Response = await call_next(request)
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    return response
 
 # ─── Routers ─────────────────────────────────────────────────
 API_PREFIX = "/api/v1"

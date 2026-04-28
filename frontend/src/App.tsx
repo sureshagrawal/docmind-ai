@@ -1,18 +1,33 @@
-import { useEffect } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { Toaster } from "@/components/ui/sonner";
 
 import { AuthProvider, useAuth } from "@/auth/AuthContext";
 import { setAuthInterceptors } from "@/api/client";
 import ProtectedRoute from "@/components/shared/ProtectedRoute";
+import { Skeleton } from "@/components/ui/skeleton";
 
 import LoginPage from "@/components/auth/LoginPage";
 import SignupPage from "@/components/auth/SignupPage";
 import ForgotPasswordPage from "@/components/auth/ForgotPasswordPage";
 import ResetPasswordPage from "@/components/auth/ResetPasswordPage";
 import DashboardPage from "@/components/dashboard/DashboardPage";
-import ResearchPage from "@/components/research/ResearchPage";
-import AdminPage from "@/components/admin/AdminPage";
+
+// Lazy-loaded pages
+const ResearchPage = lazy(() => import("@/components/research/ResearchPage"));
+const AdminPage = lazy(() => import("@/components/admin/AdminPage"));
+
+function LazyFallback() {
+  return (
+    <div className="flex min-h-screen items-center justify-center">
+      <div className="space-y-4 w-80">
+        <Skeleton className="h-8 w-48 mx-auto" />
+        <Skeleton className="h-4 w-64 mx-auto" />
+        <Skeleton className="h-32 w-full rounded-xl" />
+      </div>
+    </div>
+  );
+}
 
 function AppRoutes() {
   const { accessToken, refresh, logout } = useAuth();
@@ -33,8 +48,8 @@ function AppRoutes() {
       <Route path="/forgot-password" element={<ForgotPasswordPage />} />
       <Route path="/reset-password" element={<ResetPasswordPage />} />
       <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
-      <Route path="/research" element={<ProtectedRoute><ResearchPage /></ProtectedRoute>} />
-      <Route path="/admin" element={<AdminPage />} />
+      <Route path="/research" element={<ProtectedRoute><Suspense fallback={<LazyFallback />}><ResearchPage /></Suspense></ProtectedRoute>} />
+      <Route path="/admin" element={<Suspense fallback={<LazyFallback />}><AdminPage /></Suspense>} />
     </Routes>
   );
 }

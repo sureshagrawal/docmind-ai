@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Query, status
+from fastapi import APIRouter, Depends, Query, Request, status
 
 from api.v1.models.chat_models import (
     CreateSessionRequest,
@@ -9,6 +9,7 @@ from api.v1.models.chat_models import (
     SessionResponse,
 )
 from auth.dependencies import get_current_user
+from middleware.rate_limiter import limiter, AI_LIMIT
 from services import chat_service
 
 router = APIRouter(prefix="/chat", tags=["Chat"])
@@ -49,7 +50,9 @@ async def delete_session(
 # ─── Message Endpoints ──────────────────────────────────────
 
 @router.post("/{session_id}/messages", response_model=MessageResponse)
+@limiter.limit(AI_LIMIT)
 async def send_message(
+    request: Request,
     session_id: str,
     body: SendMessageRequest,
     current_user: dict = Depends(get_current_user),

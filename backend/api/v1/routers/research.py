@@ -1,4 +1,4 @@
-from fastapi import APIRouter, BackgroundTasks, Depends, status
+from fastapi import APIRouter, BackgroundTasks, Depends, Request, status
 from fastapi.responses import FileResponse
 
 from api.v1.models.research_models import (
@@ -8,6 +8,7 @@ from api.v1.models.research_models import (
     StartResearchResponse,
 )
 from auth.dependencies import get_current_user
+from middleware.rate_limiter import limiter, AI_LIMIT
 from services import research_service
 
 router = APIRouter(prefix="/research", tags=["Research"])
@@ -16,7 +17,9 @@ router = APIRouter(prefix="/research", tags=["Research"])
 # Route order matters: /history BEFORE /{job_id} routes
 
 @router.post("", response_model=StartResearchResponse, status_code=status.HTTP_202_ACCEPTED)
+@limiter.limit(AI_LIMIT)
 async def start_research(
+    request: Request,
     body: StartResearchRequest,
     background_tasks: BackgroundTasks,
     current_user: dict = Depends(get_current_user),
