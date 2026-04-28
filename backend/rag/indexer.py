@@ -85,7 +85,10 @@ def index_document(
     # 4. Store in ChromaDB
     collection_name = get_collection_name(user_id)
     client = get_chroma_client()
-    collection = client.get_or_create_collection(name=collection_name)
+    collection = client.get_or_create_collection(
+        name=collection_name,
+        metadata={"hnsw:space": "cosine"},
+    )
 
     ids = [str(uuid.uuid4()) for _ in chunks]
     metadatas = [

@@ -64,9 +64,8 @@ def search(user_id: str, query_text: str, query_embedding: list[float], top_k: i
     metadatas = results.get("metadatas", [[]])[0]
 
     for i, (doc, meta, dist) in enumerate(zip(documents, metadatas, distances)):
-        # ChromaDB returns L2 distance by default; convert to cosine similarity
-        # For normalized embeddings: cosine_similarity ≈ 1 - (distance² / 2)
-        cosine_score = max(0.0, 1.0 - (dist / 2.0))
+        # With cosine space: distance = 1 - cosine_similarity
+        cosine_score = max(0.0, 1.0 - dist)
         chunks.append({
             "content": doc,
             "metadata": meta,
