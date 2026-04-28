@@ -4,8 +4,8 @@ import { Button } from "@/components/ui/button";
 import DocumentPanel from "@/components/documents/DocumentPanel";
 import SessionSidebar from "@/components/chat/SessionSidebar";
 import ChatWindow from "@/components/chat/ChatWindow";
-import { LogOut } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { LogOut, FlaskConical, Shield } from "lucide-react";
+import { useNavigate, Link } from "react-router-dom";
 import type { Session } from "@/api/chat.api";
 
 export default function DashboardPage() {
@@ -55,8 +55,20 @@ export default function DashboardPage() {
             onNewSession={handleNewSession}
           />
         </div>
-        <div className="border-t border-neutral-200 pt-3 mt-3">
-          <p className="text-xs text-muted-foreground truncate mb-2">{user?.email}</p>
+        <div className="border-t border-neutral-200 pt-3 mt-3 space-y-1">
+          <Link to="/research">
+            <Button variant="ghost" size="sm" className="w-full justify-start gap-2">
+              <FlaskConical className="h-4 w-4" />
+              Deep Research
+            </Button>
+          </Link>
+          <Link to="/admin">
+            <Button variant="ghost" size="sm" className="w-full justify-start gap-2">
+              <Shield className="h-4 w-4" />
+              Admin
+            </Button>
+          </Link>
+          <p className="text-xs text-muted-foreground truncate pt-2 px-2">{user?.email}</p>
           <Button variant="ghost" size="sm" className="w-full justify-start gap-2" onClick={handleLogout}>
             <LogOut className="h-4 w-4" />
             Sign out
