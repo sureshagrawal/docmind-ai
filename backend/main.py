@@ -46,4 +46,14 @@ async def startup_event():
     logger.info(f"Starting DocMind AI v{settings.APP_VERSION} [{settings.ENVIRONMENT}]")
     init_db()
     logger.info("Database tables initialized")
-    # Phase 5: stale job recovery + retention cleanup will be added here
+
+    # Stale job recovery — mark stuck jobs as failed
+    from repositories.research_repository import mark_stale_jobs_failed, cleanup_expired_jobs
+    stale_count = mark_stale_jobs_failed()
+    if stale_count > 0:
+        logger.info(f"Marked {stale_count} stale research job(s) as failed")
+
+    # Retention cleanup — delete expired jobs
+    expired_count = cleanup_expired_jobs()
+    if expired_count > 0:
+        logger.info(f"Cleaned up {expired_count} expired research job(s)")
