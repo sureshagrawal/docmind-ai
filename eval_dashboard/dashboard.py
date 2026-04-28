@@ -14,6 +14,33 @@ EVAL_BACKEND_URL = os.getenv("EVAL_BACKEND_URL", "http://localhost:8000")
 ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "")
 EVAL_PASS_THRESHOLD = float(os.getenv("EVAL_PASS_THRESHOLD", "0.70"))
 
+
+def _get_token():
+    """Get a temporary access token for API calls."""
+    if "api_token" not in st.session_state:
+        try:
+            resp = requests.post(
+                f"{EVAL_BACKEND_URL}/api/v1/auth/login",
+                json={"email": "eval@docmind.ai", "password": "EvalPass@123!"},
+                timeout=10,
+            )
+            if resp.status_code == 401:
+                requests.post(
+                    f"{EVAL_BACKEND_URL}/api/v1/auth/register",
+                    json={"email": "eval@docmind.ai", "password": "EvalPass@123!", "full_name": "Eval Bot"},
+                    timeout=10,
+                )
+                resp = requests.post(
+                    f"{EVAL_BACKEND_URL}/api/v1/auth/login",
+                    json={"email": "eval@docmind.ai", "password": "EvalPass@123!"},
+                    timeout=10,
+                )
+            st.session_state.api_token = resp.json()["access_token"]
+        except Exception:
+            st.session_state.api_token = ""
+    return st.session_state.api_token
+
+
 st.set_page_config(page_title="DocMind AI — RAGAS Evaluation", layout="wide")
 st.title("📊 DocMind AI — RAGAS Evaluation Dashboard")
 st.caption("RAG quality metrics: Faithfulness, Answer Relevancy, Context Precision")
@@ -187,31 +214,3 @@ if is_admin:
 
                 except Exception as e:
                     st.error(f"Test failed: {e}")
-
-
-def _get_token():
-    """Get a temporary access token for API calls."""
-    if "api_token" not in st.session_state:
-        # Register/login a test user for evaluation
-        try:
-            resp = requests.post(
-                f"{EVAL_BACKEND_URL}/api/v1/auth/login",
-                json={"email": "eval@docmind.ai", "password": "EvalPass@123!"},
-                timeout=10,
-            )
-            if resp.status_code == 401:
-                # Try registering first
-                requests.post(
-                    f"{EVAL_BACKEND_URL}/api/v1/auth/register",
-                    json={"email": "eval@docmind.ai", "password": "EvalPass@123!", "full_name": "Eval Bot"},
-                    timeout=10,
-                )
-                resp = requests.post(
-                    f"{EVAL_BACKEND_URL}/api/v1/auth/login",
-                    json={"email": "eval@docmind.ai", "password": "EvalPass@123!"},
-                    timeout=10,
-                )
-            st.session_state.api_token = resp.json()["access_token"]
-        except Exception:
-            st.session_state.api_token = ""
-    return st.session_state.api_token

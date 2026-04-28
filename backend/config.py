@@ -63,7 +63,7 @@ class Settings(BaseSettings):
     CHUNK_SIZE: int = 1000
     CHUNK_OVERLAP: int = 200
     RAG_TOP_K: int = 5
-    WEB_SEARCH_FALLBACK_THRESHOLD: float = 0.50
+    WEB_SEARCH_FALLBACK_THRESHOLD: float = 0.65
 
     # ─── Chat ────────────────────────────────────────────────
     CHAT_CONTEXT_WINDOW: int = 10
@@ -74,7 +74,7 @@ class Settings(BaseSettings):
 
     # ─── Confidence ──────────────────────────────────────────
     CONFIDENCE_HIGH_THRESHOLD: float = 0.75
-    CONFIDENCE_MEDIUM_THRESHOLD: float = 0.50
+    CONFIDENCE_MEDIUM_THRESHOLD: float = 0.65
     RESEARCH_CONFIDENCE_HIGH: float = 0.70
     RESEARCH_CONFIDENCE_MEDIUM: float = 0.45
     WEB_SEARCH_PENALTY: float = 0.10

@@ -1,44 +1,44 @@
-"""Hardcoded test Q&A pairs for RAGAS evaluation."""
+"""Hardcoded test Q&A pairs for RAGAS evaluation — based on uploaded papers."""
 
 TEST_DATASET = [
     {
-        "question": "What is retrieval-augmented generation?",
-        "context_query": "retrieval augmented generation RAG",
+        "question": "How does RAG enhance large language models?",
+        "context_query": "RAG retrieval augmented generation LLM",
     },
     {
-        "question": "How do vector databases store embeddings?",
-        "context_query": "vector database embeddings storage",
+        "question": "What were the results observed in the document intelligence system using RAG?",
+        "context_query": "RAG results factual accuracy hallucination",
     },
     {
-        "question": "What is the difference between supervised and unsupervised learning?",
-        "context_query": "supervised unsupervised learning difference",
+        "question": "How does semantic search improve retrieval compared to keyword-based systems?",
+        "context_query": "semantic search vector embeddings keyword",
     },
     {
-        "question": "Explain the transformer architecture in neural networks.",
-        "context_query": "transformer architecture neural networks attention",
+        "question": "What is the methodology used in semantic search with vector embeddings?",
+        "context_query": "text converted embeddings vector methodology",
     },
     {
-        "question": "What are the main challenges in natural language processing?",
-        "context_query": "natural language processing challenges NLP",
+        "question": "What technologies are used in the full stack AI chat application architecture?",
+        "context_query": "frontend backend AI chat architecture",
     },
     {
-        "question": "How does backpropagation work in deep learning?",
-        "context_query": "backpropagation deep learning gradient descent",
+        "question": "What are the strategies for cost-efficient deployment of AI applications?",
+        "context_query": "free tiers Vercel Render Supabase cost deployment",
     },
     {
-        "question": "What is transfer learning and why is it useful?",
-        "context_query": "transfer learning pre-trained models fine-tuning",
+        "question": "How do streaming APIs enable real-time responses in AI applications?",
+        "context_query": "streaming APIs SSE WebSockets real-time",
     },
     {
-        "question": "Explain the concept of attention mechanism in AI.",
-        "context_query": "attention mechanism self-attention AI",
+        "question": "What is the difference between SSE and WebSockets for AI streaming?",
+        "context_query": "Server-Sent Events WebSockets streaming token",
     },
     {
-        "question": "What are generative adversarial networks?",
-        "context_query": "generative adversarial networks GAN",
+        "question": "What problems do keyword-based search systems face?",
+        "context_query": "keyword search fail wording intent semantic",
     },
     {
-        "question": "How do large language models handle context windows?",
-        "context_query": "large language models context window tokens",
+        "question": "What references are cited in the RAG document intelligence paper?",
+        "context_query": "references BERT retrieval Lewis Devlin Manning",
     },
 ]

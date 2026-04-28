@@ -12,6 +12,7 @@ import SignupPage from "@/components/auth/SignupPage";
 import ForgotPasswordPage from "@/components/auth/ForgotPasswordPage";
 import ResetPasswordPage from "@/components/auth/ResetPasswordPage";
 import DashboardPage from "@/components/dashboard/DashboardPage";
+import LandingPage from "@/components/landing/LandingPage";
 
 // Lazy-loaded pages
 const ResearchPage = lazy(() => import("@/components/research/ResearchPage"));
@@ -42,7 +43,7 @@ function AppRoutes() {
 
   return (
     <Routes>
-      <Route path="/" element={<Navigate to="/login" replace />} />
+      <Route path="/" element={<LandingPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/signup" element={<SignupPage />} />
       <Route path="/forgot-password" element={<ForgotPasswordPage />} />
